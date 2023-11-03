@@ -7,15 +7,20 @@ export const usePlayerStore = defineStore('player', {
     }),
     getters: {
         getNextSong(){
-
+            const index = playlistData.findIndex(song => song.id === nowPlaying.id);
+            const songIndex = index;
+            return playlistData[songIndex + 1] || null;
         },
         getPreviousSong() {
-
+            const index = playlistData.findIndex(song => song.id === nowPlaying.id);
+            const songIndex = index;
+            return songIndex > 0 ? playlistData[index - 1] : false;
         },
         getNowPlayingSongId() {
             return this.now_playing?.id;
         },
         getNowPlaying() {
+            return this.now_playing;
 
         },
         getNowPlayingAlbumID() {
@@ -36,9 +41,11 @@ export const usePlayerStore = defineStore('player', {
     },
     actions: {
         setPlaylist(songs) {
+            this.playlist = songs;
 
         },
         setNowPlaying(song) {
+            this.now_playing = song;
 
         },
         resetNowPlaying() {

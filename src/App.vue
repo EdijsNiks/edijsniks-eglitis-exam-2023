@@ -1,42 +1,32 @@
 <template>
     <!--  HEADER  -->
-    <Header></Header>
+    <Header v-if="isAuthenticated"></Header>
     <!--  HEADER END  -->
-
+  
     <!--  BODY  -->
     <div id="section-body">
-        <nav id="nav-main" class="wrapper-navigation">
-            <ol>
-                <li>
-                    <a href="/">SONGS</a>
-                </li>
-                <li>
-                    <a href="/albums">ALBUMS</a>
-                </li>
-                <li>
-                    <a href="/about">ABOUT</a>
-                </li>
-            </ol>
-        </nav>
-        <router-view class="section-router"></router-view>
+      <NavigationComponent v-if="isAuthenticated" />
+      <router-view class="section-router"></router-view>
     </div>
     <!--  BODY END  -->
-
+  
     <!--  PLAYER  -->
-    <div id="section-player">
-        <AudioPlayer />
-    </div>
+    <AudioPlayer v-if="isAuthenticated" />
     <!--  PLAYER END  -->
-</template>
-
-<script>
-    import Header from '@/components/HeaderComponent.vue';
-    import AudioPlayer from '@/components/AudioPlayerComponent.vue';
-
-    export default {
-        components: {
-            Header,
-            AudioPlayer
+  </template>
+  
+  <script>
+  import NavigationComponent from '@/components/NavigationComponent.vue';
+  import { useAuthStore } from '@/stores/auth.js';
+  export default {
+      components: {
+          NavigationComponent,
+      },
+      computed: {
+            isAuthenticated() {
+            const authStore = useAuthStore();
+            return authStore.isAuthenticated;
+            }
         }
-    }
-</script>
+  };
+  </script>

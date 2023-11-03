@@ -9,7 +9,7 @@
                 <span class="avatar"></span>
                 <h3 id="txt-full-name">NAME SURNAME</h3>
             </div>
-            <button id="btn-logout">LOGOUT</button>
+            <button id="btn-logout" >LOGOUT</button>
         </div>
     </div>
 </template>
