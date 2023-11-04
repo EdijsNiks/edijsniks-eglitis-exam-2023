@@ -1,24 +1,99 @@
 <template>
-<div id="album-view">
+  <div id="album-view">
     <div class="wrapper-header">
-        <h1>ALBUMS</h1>
-        <div class="settings">
-            <button id="btn-grid"></button>
-            <button id="btn-list"></button>
-        </div>
+      <h1>ALBUMS</h1>
+      <div class="settings">
+        <button
+          id="btn-grid"
+          @click="toggleLayout('grid')"
+          :class="{ active: isGrid }"
+        >
+          <IconGrid />
+        </button>
+        <button
+          id="btn-list"
+          @click="toggleLayout('list')"
+          :class="{ active: !isGrid }"
+        >
+          <IconList />
+        </button>
+      </div>
     </div>
-    <ul id="list-albums">
-        <li class="album">
-            <img id="img-album" src="https://i.scdn.co/image/ab67616d00001e02980c9d288a180838cd12ad24" />
-            <div class="album-info">
-                <h4 id="txt-album-name">We May Grow Old But We Never Grow Up</h4>
-                <p id="txt-album-artists">Example</p>
-                <div class="album-year">
-                    <p id="txt-album-year">2022</p>
-                    <p id="txt-album-tracks">2</p>
-                </div>
-            </div>
-        </li>
+    <ul id="list-albums" :class="{ grid: isGrid }">
+      <li
+        class="album"
+        v-for="album in albums"
+        :key="album.id"
+        @click="selectAlbum(album)"
+        :class="{ active: album.id === currentAlbumId }"
+      >
+        <img id="img-album" :src="album.images?.[0]?.url" />
+        <div class="album-info">
+          <h4 id="txt-album-name">{{ album.name }}</h4>
+          <p id="txt-album-artists">{{ album.artists.join(", ") }}</p>
+          <div class="album-year">
+            <p id="txt-album-year">{{ getYear(album) }}</p>
+            <p id="txt-album-tracks">{{ getTrackCount(album) }}</p>
+          </div>
+        </div>
+      </li>
     </ul>
-</div>
+  </div>
 </template>
+
+<script>
+import IconGrid from "@/components/icons/IconGrid.vue";
+import IconList from "../components/icons/IconList.vue";
+import songsAPI from "../data/songs.js"; 
+
+export default {
+  data() {
+    return {
+      isGrid: true,
+      currentAlbumId: null,
+      albums: [], 
+    };
+  },
+  created() {
+    this.loadAlbums(); 
+  },
+  methods: {
+    loadAlbums() {
+      this.albums = this.groupAlbums(songsAPI);
+    },
+    toggleLayout(layout) {
+      this.isGrid = layout === "grid";
+    },
+    selectAlbum(album) {
+      this.currentAlbumId = album.id;
+    },
+    getYear(album) {
+      return album.release_date.split("-")[0];
+    },
+    getTrackCount(album) {
+      return `${album.tracks.length} song${album.tracks.length > 1 ? "s" : ""}`;
+    },
+    groupAlbums(songs) {
+      const albums = {};
+
+      songs.forEach((song) => {
+        if (!albums[song.album.id]) {
+          const { id, name, images, artists, release_date } = song.album;
+          albums[song.album.id] = {
+            id,
+            name,
+            images,
+            artists: artists.map((artist) => artist.name),
+            release_date,
+            tracks: [song],
+          };
+        } else {
+          albums[song.album.id].tracks.push(song);
+        }
+      });
+
+      return Object.values(albums);
+    },
+  },
+};
+</script>
