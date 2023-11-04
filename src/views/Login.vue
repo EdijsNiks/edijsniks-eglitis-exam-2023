@@ -18,12 +18,14 @@
           v-model="password"
           @input="validateForm"
         />
-        <button id="btn-submit" type="submit" :disabled="isSubmitDisabled">LOGIN</button>
+        <button id="btn-submit" type="submit" :disabled="isSubmitDisabled" @click="validateForm">LOGIN</button>
       </form>
     </div>
   </template>
   
   <script>
+  import { useAuthStore } from '../stores/auth.js';
+
   export default {
     data() {
       return {
@@ -37,12 +39,9 @@
       },
     },
     methods: {
-      submitForm() {
-        if (!this.isSubmitDisabled) {
-          useAuthStore.verifyUser(this.email, this.password);
-        }
-      },
       validateForm() {
+        const authStore = useAuthStore()
+        authStore.authenticate(this.email, this.password)
       },
     },
   };
