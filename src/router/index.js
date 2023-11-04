@@ -38,21 +38,15 @@ const router = createRouter({
 // argument "from" stores the address from where we're coming from
 
 router.beforeEach((to, from, next) => {
-    const isAuthenticated = useAuthStore().isAuthenticated;
+    const authStore = useAuthStore(); 
   
-    if (isAuthenticated && to.path === '/login') {
-      next('/');
-      return;
+    if (to.path !== '/login' && !authStore.isAuthenticated) {
+      next('/login'); 
+    } else if (to.path === '/login' && authStore.isAuthenticated) {
+      next('/'); 
+    } else {
+      next(); 
     }
-    if (!isAuthenticated && to.path !== '/login') {
-      if (useAuthStore().authenticate()) {
-        next();
-      } else {
-        next('/login');
-      }
-      return;
-    }
-    next();
   });
 
 export default router

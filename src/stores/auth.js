@@ -20,15 +20,13 @@ export const useAuthStore = defineStore('auth', {
       if (email === 'edijs@test.com' && password === '123456') {
         localStorage.setItem('is_authenticated', 'true');
         this.authenticated = true;
-      
-        this.$router.push('/');
+        router.push('/');
       }
     },
     logout() {
       localStorage.clear();
       this.authenticated = false;
-
-      this.$router.push('/login');
+      router.push('/login');
     },
     toggleFavorite(songID) {
       if (!this.user.favorite_songs.includes(songID)) {

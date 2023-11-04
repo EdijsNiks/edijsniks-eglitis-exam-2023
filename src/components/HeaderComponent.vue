@@ -1,38 +1,35 @@
 <template>
-    <div id="main-header" class="active">
+  <div id="main-header" class="active">
       <div class="wrapper-logo">
-        <img src="@/assets/logo.svg" alt="logo" />
-        <h2>KRAKEN.FM</h2>
+          <img src="@/assets/logo.svg"/>
+          <h2>KRAKEN.FM</h2>
       </div>
       <div class="wrapper-profile">
-        <div class="section-user">
-          <span class="avatar"></span>
-          <h3 id="txt-full-name">{{ userName }} {{ userSurname }}</h3>
-        </div>
-        <button id="btn-logout" @click="handleLogout">LOGOUT</button>
+          <div class="section-user">
+              <span class="avatar"></span>
+              <h3 id="txt-full-name">{{ auth.user.name }} {{ auth.user.surname }}</h3>
+          </div>
+          <button id="btn-logout" @click="handleLogout">LOGOUT</button>
       </div>
-    </div>
-  </template>
-  
- <script>
- /* import { useAuthStore } from '../stores/auth.js';
-  
-  export default {
-    setup() {
-      const userName = useAuthStore.user.name;
-      const userSurname = useAuthStore.user.surname;
-      
-  
-     const handleLogout = () => {
-      useAuthStore.logout(); 
-    };
+  </div>
+</template>
 
-      return {
-        userName,
-        userSurname,
-        handleLogout,
-      };
+<script>
+import { useAuthStore } from '../stores/auth';
+
+export default {
+  data() {
+    return {
+      auth: useAuthStore(),
+    };
+  },
+  methods: {
+    handleLogout() {
+      alert('You have been logged out');
+      this.auth.logout();
     },
-  };*/
-  </script>
+  },
+};
+</script>
+
 
