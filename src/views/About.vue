@@ -61,6 +61,10 @@
 </template>
 
 <script>
+
+import { useAuthStore } from "../stores/auth";
+
+
 export default {
   data() {
     return {
